@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リモコン</title>
+    <link rel="stylesheet" href="style">
+</head>
+<body>
+    <div id="app">
+        <btn v-for="(item, idx) in btnlist" :data="item" @click="send(idx)"></btn>
+        <p>デバッグメッセージ: {{debugmsg}}</p>
+        <p>接続状況： {{msgs[ws.readyState] ? "接続" : "切断"}}</p>
+    </div>
+    <script src="ip"></script>
+    <script type="module" src="script"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "pcrcserver",
+  "version": "1.0.0",
+  "description": "server for remote controlling browser",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "TNTSuperMan",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "http": "^0.0.1-security",
+    "ws": "^8.17.0"
+  }
+}
