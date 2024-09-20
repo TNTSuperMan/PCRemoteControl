@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="app">
-        <btn v-for="(item, idx) in btnlist" :data="item" @click="send(idx)"></btn>
+        <btn v-for="(item, idx) in btnlist" :data="item" :click="()=>send(idx)"></btn>
         <p>デバッグメッセージ: {{debugmsg}}</p>
         <p>接続状況： {{msgs[ws.readyState] ? "接続" : "切断"}}</p>
     </div>

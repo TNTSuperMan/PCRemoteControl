@@ -7,17 +7,14 @@ createApp({
         msgs: [0,1,0,0],
         btnlist:[
             {
-                text: "||",
+                text: "▶||",
                 id: "stop"
             },{
                 text: "▶|",
                 id: "skipads"
             },{
-                text: "全画面",
-                id: "fullscr"
-            },{
-                text: "今の動画を選択",
-                id: "nowselect",
+                text: "動画",
+                id: "vselect",
                 enter: true
             },{
                 text: "-10",
@@ -30,11 +27,17 @@ createApp({
                 id: "movminusfive"
             },{
                 text: "+5",
-                id: "movplusfive"
-            },{
-                text: "今の動画にする",
-                id: "nowselect",
+                id: "movplusfive",
                 enter: true
+            },{
+                text: "↓",
+                id: "downmov"
+            },{
+                text: "↑",
+                id: "upmov"
+            },{
+                text: "▶",
+                id: "pmov"
             },
         ]
     }},
@@ -57,6 +60,6 @@ createApp({
         this.init();
     }
 }).component("btn",{
-    props:["data"],
-    template: `<a href="#" :style="data.enter ? 'display:table' : null">{{ data.text }}</a>`
+    props:["data","click"],
+    template: `<a href="#" @click="click()">{{ data.text }}</a><br v-if="data.enter">`
 }).mount("#app");

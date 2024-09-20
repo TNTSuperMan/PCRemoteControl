@@ -1,9 +1,14 @@
-const $ = q => document.querySelector(q);
-let fullflag = false;
-let socket;
-const init = e => {
-    socket = new WebSocket("ws://localhost:1537");    
+(()=>{
+    let i = -1;
+    const $ = q => document.querySelector(q);
+    const $$ = q => document.querySelectorAll(q);
+    let socket = new WebSocket("ws://localhost:1537");    
+    const scrollMov = () => {
+        //document.documentElement.scrollBy(0,$$("#video-title")[i].getBoundingClientRect().y - 200)
+        $$("#video-title")[i].focus({preventScroll:true, focusVisible:true})
+    }
     socket.onmessage = msg => {
+        console.log(msg.data, i)
         switch(msg.data){
             case "stop": 
                 $("video").focus();
@@ -13,17 +18,8 @@ const init = e => {
                 $("video").focus();
                 $(".ytp-ad-skip-button-modern").click();
                 break;
-            case "fullscr":
-                $("video").focus();
-                if(fullflag){
-                    $("video").webkitExitFullscreen()
-                }else{
-                    $("video").requestFullscreen();
-                }
-                fullflag = !fullflag;
-                break;
-            case "nowselect":
-                $("video").focus();
+            case "vselect":
+                document.documentElement.scrollTop = 0
                 break;
             case "movminusten":
                 $("video").currentTime -= 10;
@@ -37,9 +33,24 @@ const init = e => {
             case "movplusfive":
                 $("video").currentTime += 5;
                 break;
+            case "downmov":
+                i++;
+                scrollMov()
+                break;
+            case "upmov":
+                i--;
+                if(i < 0){
+                    i = -1;
+                    document.documentElement.scrollTop = 0
+                }else{
+                    scrollMov()
+                }
+                break;
+            case "pmov":
+                if(i > 0){
+                    $$("#video-title")[i].click()
+                }
+                break;
         }
     }
-    socket.onclose = e => 
-        setTimeout(init,1000);
-}
-init();
+})()
