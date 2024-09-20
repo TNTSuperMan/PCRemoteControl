@@ -5,8 +5,7 @@ function load(){
     file = {
         home: readfile("src/index.html","utf-8"),
         vue: readfile("src/vue.min.js","utf-8"),
-        script: readfile("src/script.js","utf-8"),
-        style: readfile("src/style.css","utf-8")
+        script: readfile("src/script.js","utf-8")
     }
 }
 function write(res,mime,content){
@@ -24,7 +23,9 @@ for(let dev in intr){
         }
     })
 }
+const now = () => new Date().toJSON()
 require("http").createServer((req,res) => {
+    console.log(now() + ": HTTP Request '" + req.url + "'")
     switch(req.url){
         case "/":
             load();
@@ -33,14 +34,11 @@ require("http").createServer((req,res) => {
         case "/vue":
             write(res,"text/javascript",file.vue);
             break;
-        case "/style":
-            write(res,"text/css",file.style);
-            break;
         case "/script":
             write(res,"text/javascript",file.script);
             break;
         case "/ip":
-            write(res,"text/javascript","const ip = '" + ips[1] + "'");
+            write(res,"text/javascript","export default'" + ips[1] + "'");
             break;
         default:
             res.writeHead(404);
@@ -52,13 +50,16 @@ require("http").createServer((req,res) => {
 
 const WebSocket = require("ws").Server;
 const wsserver = new WebSocket({port: 1537});
-wsserver.on("connection", ws => 
+wsserver.on("connection", ws => {
+    console.log(now() + ": Joined Client")
+    ws.on("close", ()=>console.log(now() + ": Exited Client"))
     ws.on("message", msg => {
         let msgtext = "";
-        console.log(msg)
-        msg.forEach(e=>{
-            msgtext += String.fromCharCode(e);
-        })
+        msg.forEach(e=>
+            msgtext += String.fromCharCode(e)
+        )
+        console.log(now() + ": WS Message   '" + msgtext + "'")
         wsserver.clients.forEach(client => client.send(msgtext));
     })
-)
+})
+console.log(now() + ": PCRC Server Started")

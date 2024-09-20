@@ -1,10 +1,10 @@
 import {createApp} from "/vue";
+import ip from "/ip";
 createApp({
     data:()=>{return {
         ws:0,
-        debugmsg: "DebugMsg",
-        connectflag:0,
-        msgs: [0,1,0,0],
+        isc:0,
+        searchq:"",
         btnlist:[
             {
                 text: "▶||",
@@ -20,14 +20,14 @@ createApp({
                 text: "-10",
                 id: "movminusten"
             },{
-                text: "+10",
-                id: "movplusten"
-            },{
                 text: "-5",
                 id: "movminusfive"
             },{
                 text: "+5",
-                id: "movplusfive",
+                id: "movplusfive"
+            },{
+                text: "+10",
+                id: "movplusten",
                 enter: true
             },{
                 text: "↓",
@@ -45,10 +45,14 @@ createApp({
         init(){
             this.ws = new WebSocket("ws://" + ip + ":1537");
             this.ws.onmessage = msg => {
-                this.debugmsg = msg.data;
+                if(msg.data == "success"){
+                    this.isc = 1
+                }
             };
-            this.ws.onclose = () => 
+            this.ws.onclose = () => {
                 setTimeout(this.init,1000)
+                this.isc = 0
+            }
             this.ws.onopen = () =>
                 this.ws.send("test")
         },
